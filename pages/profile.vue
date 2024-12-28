@@ -1,8 +1,6 @@
 <template>
   <div class="profile">
-    <div class="container">
-      <h2 class="profile__title">Профиль</h2>
-
+    <UContainer>
       <div class="profile__info" v-if="profileData?.info">
         <img class="profile__image" :src="profileData.info.photo_200" alt="" />
         <a
@@ -13,20 +11,7 @@
           {{ profileData.info.first_name }} {{ profileData.info.last_name }}
         </a>
       </div>
-
-      <div class="profile__friends" v-if="profileData?.friends">
-        <h3 class="profile__friends-title">Друзья</h3>
-        <div class="profile__friends-list">
-          <a
-            v-for="friend in profileData?.friends"
-            :href="`https://vk.com/id${friend.id}`"
-            target="_blank"
-          >
-            {{ friend.first_name }} {{ friend.last_name }}
-          </a>
-        </div>
-      </div>
-    </div>
+    </UContainer>
   </div>
 </template>
 
@@ -61,6 +46,12 @@ const { data: profileData } = await useAsyncData("profile", async () => {
     margin-bottom: 40px;
   }
 
+  &__title {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 24px;
+  }
+
   &__image {
     width: 100px;
     height: 100px;
@@ -68,7 +59,6 @@ const { data: profileData } = await useAsyncData("profile", async () => {
   }
 
   &__name {
-    color: black;
     text-decoration: none;
   }
 
@@ -79,7 +69,6 @@ const { data: profileData } = await useAsyncData("profile", async () => {
       gap: 5px;
 
       a {
-        color: black;
         text-decoration: none;
       }
     }

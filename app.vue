@@ -1,21 +1,41 @@
 <template>
-  <NuxtPage />
+  <NuxtLoadingIndicator />
+  <UHorizontalNavigation
+    :links="links"
+    class="border-b border-gray-200 dark:border-gray-800"
+  />
+  <div class="page">
+    <NuxtPage />
+  </div>
 </template>
 
-<style>
-* {
-  font-family: sans-serif;
-}
+<script setup>
+const links = [
+  {
+    label: "Главная",
+    icon: "i-heroicons-home",
+    to: "/",
+  },
+  {
+    label: "Профиль",
+    icon: "i-heroicons-user",
+    to: "/profile",
+  },
+  {
+    label: "Друзья",
+    icon: "i-heroicons-users",
+    to: "/friends",
+  },
+  {
+    label: "Диалоги",
+    icon: "i-heroicons-chat-bubble-oval-left-ellipsis",
+    to: "/dialogs",
+  },
+];
+</script>
 
-body {
-  margin: 0;
-  padding: 0;
-}
-
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
+<style scoped lang="scss">
+.page {
+  padding-top: 20px;
 }
 </style>
