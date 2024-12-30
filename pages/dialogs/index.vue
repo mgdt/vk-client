@@ -9,7 +9,10 @@
       </div>
 
       <div v-else class="dialogs__list">
-        <template v-for="dialog in dialogs?.items">
+        <template
+          v-for="dialog in dialogs?.items"
+          :key="dialog.conversation.peer.id"
+        >
           <DialogItem
             :dialog="dialog"
             :dialogInfo="

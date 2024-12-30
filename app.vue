@@ -10,6 +10,8 @@
 </template>
 
 <script setup>
+const profile = useState("profile", "Grigoriy");
+
 const links = [
   {
     label: "Главная",

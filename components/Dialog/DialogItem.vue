@@ -16,7 +16,7 @@
         >
           {{ dialogTitle }}
         </NuxtLink>
-        <p class="dialog__message text-slate-500">
+        <p class="dialog__message text-slate-400">
           {{ dialog.last_message.text?.slice(0, 200) }}
         </p>
       </div>
