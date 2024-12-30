@@ -1,8 +1,15 @@
 <template>
   <div class="dialogs">
     <UContainer>
-      <div class="dialogs__list">
-        <template v-for="dialog in dialogs.items">
+      <div v-if="status === 'pending'" class="dialogs__list">
+        <template v-for="_ in 20">
+          <DialogSkeleton />
+          <UDivider class="divider"></UDivider>
+        </template>
+      </div>
+
+      <div v-else class="dialogs__list">
+        <template v-for="dialog in dialogs?.items">
           <DialogItem
             :dialog="dialog"
             :dialogInfo="
@@ -20,9 +27,12 @@
 </template>
 
 <script setup>
-import DialogItem from "~/components/DialogItem.vue";
+import DialogItem from "~/components/Dialog/DialogItem.vue";
+import DialogSkeleton from "~/components/Dialog/DialogSkeleton.vue";
 
-const { data: dialogs } = await useFetch("/api/dialogs");
+const { data: dialogs, status } = useFetch("/api/dialogs", {
+  lazy: true,
+});
 
 const dialogsInfo = ref({});
 
@@ -53,5 +63,12 @@ function getDialogInfoById(peerId, peerType) {
 .divider {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.dialogs {
+  &__skeleton-image {
+    width: 50px;
+    height: 50px;
+  }
 }
 </style>

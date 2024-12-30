@@ -1,14 +1,14 @@
 <template>
   <div class="profile">
     <UContainer>
-      <div class="profile__info" v-if="profileData?.info">
-        <img class="profile__image" :src="profileData.info.photo_200" alt="" />
+      <div class="profile__info" v-if="profile">
+        <img class="profile__image" :src="profile.photo_200" alt="" />
         <a
-          :href="`https://vk.com/id${profileData.info.id}`"
+          :href="`https://vk.com/id${profile.id}`"
           target="_blank"
           class="profile__name"
         >
-          {{ profileData.info.first_name }} {{ profileData.info.last_name }}
+          {{ profile.first_name }} {{ profile.last_name }}
         </a>
       </div>
     </UContainer>
@@ -16,24 +16,8 @@
 </template>
 
 <script setup>
-async function fetchProfileInfo() {
-  return await $fetch("/api/profile");
-}
-
-async function fetchFriends() {
-  return await $fetch("/api/friends");
-}
-
-const { data: profileData } = await useAsyncData("profile", async () => {
-  const [info, friends] = await Promise.all([
-    fetchProfileInfo(),
-    fetchFriends(),
-  ]);
-
-  return {
-    info,
-    friends,
-  };
+const { data: profile } = useFetch("/api/profile", {
+  lazy: true,
 });
 </script>
 

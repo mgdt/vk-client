@@ -10,10 +10,13 @@
       <img v-else class="dialog__image" :src="dialogInfo.photo_50" alt="" />
 
       <div class="dialog__info">
-        <p class="dialog__title">
+        <NuxtLink
+          :to="`/dialogs/${dialog.conversation.peer.id}`"
+          class="dialog__title"
+        >
           {{ dialogTitle }}
-        </p>
-        <p class="dialog__message">
+        </NuxtLink>
+        <p class="dialog__message text-slate-500">
           {{ dialog.last_message.text?.slice(0, 200) }}
         </p>
       </div>
@@ -67,7 +70,6 @@ const dialogTitle = computed(() => {
 
   &__message {
     font-size: 14px;
-    color: lightgray;
   }
 }
 </style>
