@@ -5,7 +5,7 @@
         <template v-for="message in dialogInfo.items" :key="message.id">
           <MessageItem
             :message="message"
-            :author="getAuthorById(message.from_id)"
+            :author="profileStore.getProfileById(message.from_id)"
           />
           <UDivider class="divider" />
         </template>
@@ -16,14 +16,10 @@
 
 <script setup>
 const route = useRoute();
-const profile = useState("profile");
-
-console.log(profile);
-
+const profileStore = useProfileStore();
 const peerId = route.params.id;
 
 const dialogInfo = ref(null);
-const authors = ref({});
 
 async function fetchMessages(offset = 0) {
   const response = await $fetch("/api/dialog", {
@@ -35,28 +31,17 @@ async function fetchMessages(offset = 0) {
   });
 
   dialogInfo.value = response;
-}
 
-function getAuthorById(id) {
-  if (!dialogInfo.value) {
-    return null;
+  for (const profile of response?.profiles) {
+    profileStore.profiles[profile.id] = profile;
   }
 
-  if (authors.value[id]) {
-    return authors.value[id];
+  for (const group of response?.groups) {
+    profileStore.groups[group.id] = group;
   }
-
-  console.log("getAuthorById call");
-
-  const author = dialogInfo.value.profiles.find((profile) => profile.id === id);
-  authors.value[id] = author;
-
-  return author;
 }
 
-onMounted(() => {
-  fetchMessages();
-});
+fetchMessages();
 </script>
 
 <style scoped lang="scss">

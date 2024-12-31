@@ -2,8 +2,11 @@
   <div class="message">
     <img class="message__image" :src="props.author?.photo_50" alt="" />
     <div class="message__info">
-      <p class="message__author">
+      <p v-if="props.message.from_id > 0" class="message__author">
         {{ props.author?.first_name }} {{ props.author?.last_name }}
+      </p>
+      <p v-else class="message__author">
+        {{ props.author?.name }}
       </p>
       <div class="message__body">
         <p class="message__text text-slate-400">{{ props.message.text }}</p>
@@ -13,14 +16,20 @@
         >
           <MessageAttachments :attachments="props.message.attachments" />
         </div>
+        <p v-if="props.message.action" class="message__action text-green-400">
+          Действие с чатом
+        </p>
         <div
           v-if="props.message?.fwd_messages?.length > 0"
           class="message__fwd"
         >
-          <MessageItem
-            v-for="msg in props.message.fwd_messages"
-            :message="msg"
-          />
+          <template v-for="msg in props.message.fwd_messages" :key="msg.id">
+            <MessageItem
+              :message="msg"
+              :author="profileStore.getProfileById(msg.from_id)"
+            />
+            <UDivider class="divider" />
+          </template>
         </div>
       </div>
     </div>
@@ -38,6 +47,8 @@ const props = defineProps({
     default: null,
   },
 });
+
+const profileStore = useProfileStore();
 </script>
 
 <style scoped lang="scss">
@@ -52,8 +63,16 @@ const props = defineProps({
     border-radius: 50%;
   }
 
+  &__action {
+    font-size: 14px;
+  }
+
   &__author {
     margin-bottom: 5px;
+  }
+
+  &__attachments {
+    margin-top: 6px;
   }
 
   &__text {
@@ -62,7 +81,13 @@ const props = defineProps({
   }
 
   &__fwd {
-    margin-left: 20px;
+    margin-top: 20px;
+    margin-left: 5px;
   }
+}
+
+.divider {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>

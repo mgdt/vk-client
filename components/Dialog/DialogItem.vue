@@ -7,7 +7,7 @@
       >
         {{ dialog.conversation.chat_settings.title[0] }}
       </div>
-      <img v-else class="dialog__image" :src="dialogInfo.photo_50" alt="" />
+      <img v-else class="dialog__image" :src="author.photo_50" alt="" />
 
       <div class="dialog__info">
         <NuxtLink
@@ -30,7 +30,7 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-  dialogInfo: {
+  author: {
     type: Object,
     default: null,
   },
@@ -41,10 +41,10 @@ const dialogTitle = computed(() => {
     return props.dialog.conversation.chat_settings.title;
   }
   if (props.dialog.conversation.peer.type === "group") {
-    return props.dialogInfo.name;
+    return props.author.name;
   }
   if (props.dialog.conversation.peer.type === "user") {
-    return props.dialogInfo.first_name + " " + props.dialogInfo.last_name;
+    return props.author.first_name + " " + props.author.last_name;
   }
   return null;
 });

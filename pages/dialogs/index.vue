@@ -1,7 +1,7 @@
 <template>
   <div class="dialogs">
     <UContainer>
-      <div v-if="status === 'pending'" class="dialogs__list">
+      <div v-if="isFetching" class="dialogs__list">
         <template v-for="_ in 20">
           <DialogSkeleton />
           <UDivider class="divider"></UDivider>
@@ -15,12 +15,7 @@
         >
           <DialogItem
             :dialog="dialog"
-            :dialogInfo="
-              getDialogInfoById(
-                dialog.conversation.peer.id,
-                dialog.conversation.peer.type,
-              )
-            "
+            :author="profileStore.getProfileById(dialog.conversation.peer.id)"
           />
           <UDivider class="divider"></UDivider>
         </template>
@@ -30,36 +25,29 @@
 </template>
 
 <script setup>
-import DialogItem from "~/components/Dialog/DialogItem.vue";
-import DialogSkeleton from "~/components/Dialog/DialogSkeleton.vue";
+const profileStore = useProfileStore();
 
-const { data: dialogs, status } = useFetch("/api/dialogs", {
-  lazy: true,
-});
+const dialogs = ref([]);
+const isFetching = ref(true);
 
-const dialogsInfo = ref({});
+async function fetchDialogs() {
+  isFetching.value = true;
+  const response = await $fetch("/api/dialogs");
 
-function getDialogInfoById(peerId, peerType) {
-  if (dialogsInfo.value[peerId]) {
-    return dialogsInfo.value[peerId];
+  dialogs.value = response;
+
+  for (const profile of response.profiles) {
+    profileStore.profiles[profile.id] = profile;
   }
 
-  if (peerType === "user") {
-    const info = dialogs.value.profiles.find(
-      (profile) => profile.id === peerId,
-    );
-    dialogsInfo.value[peerId] = info;
-    return info;
+  for (const group of response.groups) {
+    profileStore.groups[group.id] = group;
   }
 
-  if (peerType === "group") {
-    const info = dialogs.value.groups.find((group) => -group.id === peerId);
-    dialogsInfo.value[peerId] = info;
-    return info;
-  }
-
-  return null;
+  isFetching.value = false;
 }
+
+fetchDialogs();
 </script>
 
 <style scoped lang="scss">

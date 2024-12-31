@@ -31,6 +31,10 @@
         </a>
       </div>
 
+      <div v-else-if="attachment.type === 'gift'" class="attach__item">
+        <img class="attach__item-gift" :src="attachment.gift.thumb_96" alt="" />
+      </div>
+
       <div v-else-if="attachment.type === 'wall'" class="attach__item">
         <p class="text-green-500">Запись со стены</p>
       </div>
@@ -58,6 +62,7 @@ const props = defineProps({
 <style scoped lang="scss">
 .attach {
   display: flex;
+  flex-wrap: wrap;
   gap: 5px;
 
   &__item {
@@ -67,6 +72,11 @@ const props = defineProps({
       width: 150px;
       height: 150px;
       object-fit: cover;
+    }
+
+    &-gift {
+      width: 50px;
+      height: 50px;
     }
 
     &-link {
