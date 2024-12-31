@@ -11,6 +11,16 @@
         </a>
       </div>
 
+      <div v-if="attachment.type === 'doc'" class="attach__item">
+        <a
+          class="attach__item-link text-green-400"
+          target="_blank"
+          :href="attachment.doc.url"
+        >
+          {{ attachment.doc.title }}
+        </a>
+      </div>
+
       <div v-else-if="attachment.type === 'video'" class="attach__item">
         <a
           class="attach__item-link text-green-400"
@@ -26,6 +36,16 @@
           <img
             class="attach__item-photo"
             :src="attachment.photo.sizes[2].url"
+            alt=""
+          />
+        </a>
+      </div>
+
+      <div v-else-if="attachment.type === 'graffiti'" class="attach__item">
+        <a :href="attachment.graffiti.url" target="_blank">
+          <img
+            class="attach__item-photo"
+            :src="attachment.graffiti.url"
             alt=""
           />
         </a>

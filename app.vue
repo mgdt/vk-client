@@ -22,14 +22,14 @@ const links = [
     to: "/profile",
   },
   {
-    label: "Друзья",
-    icon: "i-heroicons-users",
-    to: "/friends",
-  },
-  {
     label: "Диалоги",
     icon: "i-heroicons-chat-bubble-oval-left-ellipsis",
     to: "/dialogs",
+  },
+  {
+    label: "Поиск",
+    icon: "i-heroicons-magnifying-glass-16-solid",
+    to: "/search",
   },
 ];
 </script>
@@ -37,5 +37,6 @@ const links = [
 <style scoped lang="scss">
 .page {
   padding-top: 20px;
+  padding-bottom: 40px;
 }
 </style>

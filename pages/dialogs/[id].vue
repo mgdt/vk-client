@@ -1,12 +1,21 @@
 <template>
   <div class="dialog">
     <UContainer>
-      <div v-if="dialogInfo" class="dialog__list">
-        <template v-for="message in dialogInfo.items" :key="message.id">
+      <div v-if="messages.length > 0" class="dialog__list">
+        <template v-for="message in messages" :key="message.id">
           <MessageItem
             :message="message"
             :author="profileStore.getProfileById(message.from_id)"
           />
+          <UDivider class="divider" />
+        </template>
+        <UButton :disabled="isFetching" @click="offset += 200" class="mt-2">
+          {{ isFetching ? "Загрузка..." : "Загрузить еще" }}
+        </UButton>
+      </div>
+      <div v-else class="dialog__list">
+        <template v-for="_ in 20">
+          <DialogSkeleton />
           <UDivider class="divider" />
         </template>
       </div>
@@ -19,18 +28,22 @@ const route = useRoute();
 const profileStore = useProfileStore();
 const peerId = route.params.id;
 
-const dialogInfo = ref(null);
+const messages = ref([]);
+const offset = ref(0);
+const isFetching = ref(false);
 
-async function fetchMessages(offset = 0) {
+async function fetchMessages() {
+  isFetching.value = true;
+
   const response = await $fetch("/api/dialog", {
     method: "POST",
     body: {
       peerId: peerId,
-      offset,
+      offset: offset.value,
     },
   });
 
-  dialogInfo.value = response;
+  messages.value.push(...response.items);
 
   for (const profile of response?.profiles) {
     profileStore.profiles[profile.id] = profile;
@@ -39,9 +52,15 @@ async function fetchMessages(offset = 0) {
   for (const group of response?.groups) {
     profileStore.groups[group.id] = group;
   }
+
+  isFetching.value = false;
 }
 
 fetchMessages();
+
+watch(offset, () => {
+  fetchMessages();
+});
 </script>
 
 <style scoped lang="scss">

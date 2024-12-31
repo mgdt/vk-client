@@ -1,5 +1,6 @@
 <template>
   <div class="message">
+    <p class="message__date text-slate-400">{{ messageDate }}</p>
     <img class="message__image" :src="props.author?.photo_50" alt="" />
     <div class="message__info">
       <p v-if="props.message.from_id > 0" class="message__author">
@@ -49,6 +50,24 @@ const props = defineProps({
 });
 
 const profileStore = useProfileStore();
+
+const dateFormatter = new Intl.DateTimeFormat("ru", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "2-digit",
+  hour: "numeric",
+  minute: "numeric",
+});
+
+const messageDate = computed(() => {
+  if (!props.message.date) {
+    return null;
+  }
+
+  const date = new Date(props.message.date * 1000);
+
+  return dateFormatter.format(date);
+});
 </script>
 
 <style scoped lang="scss">
@@ -56,6 +75,23 @@ const profileStore = useProfileStore();
   display: flex;
   align-items: start;
   gap: 10px;
+  position: relative;
+  width: 100%;
+
+  &__date {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 13px;
+  }
+
+  &__info {
+    width: 100%;
+  }
+
+  &__body {
+    width: 100%;
+  }
 
   &__image {
     width: 40px;
@@ -82,7 +118,9 @@ const profileStore = useProfileStore();
 
   &__fwd {
     margin-top: 20px;
-    margin-left: 5px;
+    padding-left: 5px;
+    width: 100%;
+    border-left: 1px solid rgb(31, 41, 55);
   }
 }
 

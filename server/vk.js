@@ -7,5 +7,13 @@ export const vk = $fetch.create({
     access_token: config.accessToken,
     v: "5.199",
   },
-  parseResponse: (response) => JSON.parse(response).response,
+  parseResponse: (response) => {
+    const result = JSON.parse(response);
+
+    if (result.error) {
+      return result;
+    }
+
+    return result.response;
+  },
 });
