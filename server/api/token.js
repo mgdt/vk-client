@@ -6,5 +6,7 @@ export default defineEventHandler(async (event) => {
 
   setCookie(event, "token", token);
 
-  return await vk(event)("account.getProfileInfo");
+  return {
+    status: "ok",
+  };
 });

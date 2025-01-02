@@ -19,6 +19,16 @@
 const { data: profile } = useFetch("/api/profile", {
   lazy: true,
 });
+
+console.log(profile.value);
+
+const toast = useToast();
+
+onMounted(() => {
+  if (profile.value?.error?.error_msg) {
+    toast.add({ title: profile.value?.error?.error_msg });
+  }
+});
 </script>
 
 <style scoped lang="scss">

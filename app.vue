@@ -7,12 +7,14 @@
   <div class="page">
     <NuxtPage />
   </div>
+
+  <UNotifications />
 </template>
 
 <script setup>
 const links = [
   {
-    label: "Главная",
+    label: "Токен",
     icon: "i-heroicons-home",
     to: "/",
   },
