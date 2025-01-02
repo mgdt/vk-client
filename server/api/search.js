@@ -3,7 +3,7 @@ import { vk } from "../vk";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
-  return await vk("messages.search", {
+  return await vk(event)("messages.search", {
     params: {
       offset: body.offset,
       q: body.q,

@@ -1,14 +1,14 @@
 import { vk } from "../vk";
 
 export default defineEventHandler(async (event) => {
-  const friendsIds = await vk("friends.get", {
+  const friendsIds = await vk(event)("friends.get", {
     params: {
       order: "hints",
       count: 5,
     },
   });
 
-  return await vk("users.get", {
+  return await vk(event)("users.get", {
     params: {
       user_ids: friendsIds.items.join(","),
     },

@@ -1,19 +1,21 @@
-const config = useRuntimeConfig();
+export function vk(event) {
+  const token = getCookie(event, "token") || null;
 
-export const vk = $fetch.create({
-  baseURL: "https://api.vk.com/method/",
-  method: "POST",
-  params: {
-    access_token: config.accessToken,
-    v: "5.199",
-  },
-  parseResponse: (response) => {
-    const result = JSON.parse(response);
+  return $fetch.create({
+    baseURL: "https://api.vk.com/method/",
+    method: "POST",
+    params: {
+      access_token: token,
+      v: "5.199",
+    },
+    parseResponse: (response) => {
+      const result = JSON.parse(response);
 
-    if (result.error) {
-      return result;
-    }
+      if (result.error) {
+        return result;
+      }
 
-    return result.response;
-  },
-});
+      return result.response;
+    },
+  });
+}

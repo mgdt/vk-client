@@ -114,6 +114,8 @@ const messageDate = computed(() => {
   &__text {
     font-size: 14px;
     margin-top: 0;
+    white-space: break-spaces;
+    word-break: break-all;
   }
 
   &__fwd {

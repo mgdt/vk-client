@@ -1,8 +1,14 @@
 <template>
   <div class="search">
     <UContainer>
+      <h1>Поиск</h1>
+
       <form @submit.prevent="handleSubmit" class="search__form">
-        <UInput v-model="query" class="search__input"></UInput>
+        <UInput
+          v-model="query"
+          class="search__input"
+          placeholder="Поиск"
+        ></UInput>
         <UButton type="submit">Найти</UButton>
       </form>
 
@@ -56,17 +62,7 @@ async function search() {
 
   messages.value.push(...response.items);
 
-  if (response?.profiles?.length > 0) {
-    for (const profile of response?.profiles) {
-      profileStore.profiles[profile.id] = profile;
-    }
-  }
-
-  if (response?.groups?.length > 0) {
-    for (const group of response?.groups) {
-      profileStore.groups[group.id] = group;
-    }
-  }
+  profileStore.fillProfiles(response?.profiles, response?.groups);
 
   isFetching.value = false;
 }
@@ -82,6 +78,12 @@ watch(offset, () => {
 </script>
 
 <style scoped lang="scss">
+h1 {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
 .search {
   &__form {
     width: 100%;

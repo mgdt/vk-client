@@ -36,13 +36,7 @@ async function fetchDialogs() {
 
   dialogs.value = response;
 
-  for (const profile of response.profiles) {
-    profileStore.profiles[profile.id] = profile;
-  }
-
-  for (const group of response.groups) {
-    profileStore.groups[group.id] = group;
-  }
+  profileStore.fillProfiles(response.profiles, response.groups);
 
   isFetching.value = false;
 }

@@ -44,16 +44,9 @@ async function fetchMessages() {
   });
 
   messages.value.push(...response.items);
-
-  for (const profile of response?.profiles) {
-    profileStore.profiles[profile.id] = profile;
-  }
-
-  for (const group of response?.groups) {
-    profileStore.groups[group.id] = group;
-  }
-
   isFetching.value = false;
+
+  profileStore.fillProfiles(response?.profiles, response?.groups);
 }
 
 fetchMessages();
