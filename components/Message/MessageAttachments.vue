@@ -31,6 +31,14 @@
         </a>
       </div>
 
+      <div v-else-if="attachment.type === 'audio_message'" class="attach__item">
+        <audio
+          controls
+          class="attach__item-audio"
+          :src="attachment.audio_message.link_mp3"
+        ></audio>
+      </div>
+
       <div v-else-if="attachment.type === 'photo'" class="attach__item">
         <a :href="attachment.photo.orig_photo.url" target="_blank">
           <img

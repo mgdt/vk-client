@@ -1,23 +1,29 @@
 <template>
   <div class="dialog__wrapper">
     <div class="dialog">
-      <div
-        v-if="dialog.conversation.peer.type === 'chat'"
-        class="dialog__image"
-      >
-        {{ dialog.conversation.chat_settings.title[0] }}
-      </div>
-      <img v-else class="dialog__image" :src="author.photo_50" alt="" />
+      <template v-if="props.dialog.conversation.peer.type === 'chat'">
+        <img
+          v-if="props.dialog.conversation?.chat_settings?.photo?.photo_50"
+          class="dialog__image"
+          :src="props.dialog.conversation?.chat_settings.photo.photo_50"
+          alt=""
+        />
+        <div v-else class="dialog__image">
+          {{ props.dialog.conversation.chat_settings.title[0] }}
+        </div>
+      </template>
+
+      <img v-else class="dialog__image" :src="props.author.photo_50" alt="" />
 
       <div class="dialog__info">
         <NuxtLink
-          :to="`/dialogs/${dialog.conversation.peer.id}`"
+          :to="`/dialogs/${props.dialog.conversation.peer.id}`"
           class="dialog__title"
         >
           {{ dialogTitle }}
         </NuxtLink>
         <p class="dialog__message text-slate-400">
-          {{ dialog.last_message.text?.slice(0, 200) }}
+          {{ props.dialog.last_message.text?.slice(0, 200) }}
         </p>
       </div>
     </div>
@@ -34,6 +40,18 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+});
+
+const profileStore = useProfileStore();
+
+const groupImage = computed(() => {
+  const peerId = props.dialog.conversation.peer.id;
+
+  if (profileStore.groups?.[peerId]?.photo_50) {
+    return profileStore.groups?.[peerId].photo_50;
+  }
+
+  return props.dialog.conversation.chat_settings.title[0];
 });
 
 const dialogTitle = computed(() => {

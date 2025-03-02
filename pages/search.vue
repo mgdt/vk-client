@@ -13,6 +13,7 @@
       </form>
 
       <template v-if="firstFetched">
+        <div class="search__count">Найдено: {{ messagesCount }}</div>
         <div v-if="messages.length > 0" class="dialog__list">
           <template v-for="message in messages" :key="message.id">
             <MessageItem
@@ -45,6 +46,7 @@ const query = ref("");
 const offset = ref(0);
 const firstFetched = ref(false);
 const isFetching = ref(false);
+const messagesCount = ref(0);
 
 const messages = ref([]);
 
@@ -60,6 +62,7 @@ async function search() {
     },
   });
 
+  messagesCount.value = response.count;
   messages.value.push(...response.items);
 
   profileStore.fillProfiles(response?.profiles, response?.groups);
@@ -94,6 +97,11 @@ h1 {
 
   &__input {
     flex-grow: 1;
+  }
+
+  &__count {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 }
 

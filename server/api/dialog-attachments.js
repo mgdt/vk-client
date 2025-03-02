@@ -3,12 +3,12 @@ import { vk } from "../vk";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
-  return await vk(event)("messages.getConversations", {
+  return await vk(event)("messages.getHistory", {
     params: {
-      filter: "all",
-      extended: 1,
+      offset: body.offset,
+      peer_id: body.peerId,
       count: 200,
-      offset: body?.offset || 0,
+      extended: 1,
     },
   });
 });

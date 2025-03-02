@@ -120,7 +120,7 @@ const messageDate = computed(() => {
 
   &__fwd {
     margin-top: 20px;
-    padding-left: 5px;
+    padding-left: 10px;
     width: 100%;
     border-left: 1px solid rgb(31, 41, 55);
   }
