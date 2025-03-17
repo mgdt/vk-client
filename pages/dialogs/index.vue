@@ -4,23 +4,27 @@
       <div v-if="isFetching" class="dialogs__list">
         <template v-for="_ in 20">
           <DialogSkeleton />
-          <UDivider class="divider"></UDivider>
         </template>
       </div>
 
       <div v-else class="dialogs__list">
-        <div class="dialogs__count">
-          Количество диалогов: {{ dialogs?.count }}
+        <div class="dialogs__top">
+          <span>Количество диалогов: {{ dialogs?.count }}</span>
+          <div class="dialogs__buttons">
+            <UButton @click="fetchDialogsLength">Количество сообщений</UButton>
+            <UButton @click="fetchDialogsLength">Сортировка</UButton>
+          </div>
         </div>
         <template
           v-for="dialog in dialogs?.items"
           :key="dialog.conversation.peer.id"
         >
           <DialogItem
+            @mouseover.once="fetchDialogLength(dialog)"
+            class="dialogs__item"
             :dialog="dialog"
             :author="profileStore.getProfileById(dialog.conversation.peer.id)"
           />
-          <UDivider class="divider"></UDivider>
         </template>
 
         <div class="dialogs__pagination">
@@ -44,17 +48,21 @@ const isFetching = ref(true);
 async function fetchDialogs(offset = 0) {
   isFetching.value = true;
 
-  const response = await $fetch("/api/dialogs", {
-    method: "POST",
-    body: {
-      offset,
-    },
-  });
+  try {
+    const response = await $fetch("/api/dialogs", {
+      method: "POST",
+      body: {
+        offset,
+      },
+    });
 
-  dialogs.value = response;
-  profileStore.fillProfiles(response.profiles, response.groups);
-
-  isFetching.value = false;
+    dialogs.value = response;
+    profileStore.fillProfiles(response.profiles, response.groups);
+  } catch (error) {
+    console.log("Ошибка загрузки диалогов", error);
+  } finally {
+    isFetching.value = false;
+  }
 }
 
 fetchDialogs();
@@ -74,28 +82,65 @@ const dialogsCount = computed(() => {
 
   return dialogs.value?.count;
 });
+
+async function fetchDialogLength(dialog) {
+  const peerId = dialog?.conversation?.peer?.id;
+
+  if (!peerId) {
+    return;
+  }
+
+  const response = await $fetch("/api/dialog", {
+    method: "POST",
+    body: {
+      peerId: peerId,
+      offset: 0,
+    },
+  });
+
+  dialog.count = response.count;
+}
+
+async function fetchDialogsLength() {
+  if (!dialogs.value?.items) {
+    return;
+  }
+
+  for (const dialog of dialogs.value.items) {
+    await fetchDialogLength(dialog);
+    await sleep(100);
+  }
+}
 </script>
 
 <style scoped lang="scss">
-.divider {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 .dialogs {
   &__skeleton-image {
     width: 50px;
     height: 50px;
   }
 
-  &__count {
+  &__top {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 20px;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
   }
 
   &__pagination {
     display: flex;
     justify-content: center;
     margin-top: 30px;
+  }
+
+  &__item {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #202a37;
   }
 }
 </style>

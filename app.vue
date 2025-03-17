@@ -2,7 +2,7 @@
   <NuxtLoadingIndicator />
   <UHorizontalNavigation
     :links="links"
-    class="border-b border-gray-200 dark:border-gray-800"
+    class="border-b border-gray-200 dark:border-gray-800 fixed bg-[#121212]"
   />
   <div class="page">
     <NuxtPage />
@@ -38,7 +38,7 @@ const links = [
 
 <style scoped lang="scss">
 .page {
-  padding-top: 20px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 </style>

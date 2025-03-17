@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
     params: {
       offset: body.offset,
       peer_id: body.peerId,
+      attachment_types: body.attachmentTypes,
       count: 200,
-      extended: 1,
     },
   });
 });

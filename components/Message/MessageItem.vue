@@ -26,10 +26,10 @@
         >
           <template v-for="msg in props.message.fwd_messages" :key="msg.id">
             <MessageItem
+              class="message__item"
               :message="msg"
               :author="profileStore.getProfileById(msg.from_id)"
             />
-            <UDivider class="divider" />
           </template>
         </div>
       </div>
@@ -124,10 +124,11 @@ const messageDate = computed(() => {
     width: 100%;
     border-left: 1px solid rgb(31, 41, 55);
   }
-}
 
-.divider {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  &__item {
+    border-bottom: 1px solid rgb(31, 41, 55);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
 }
 </style>

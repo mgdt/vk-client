@@ -18,13 +18,25 @@
       <div class="dialog__info">
         <NuxtLink
           :to="`/dialogs/${props.dialog.conversation.peer.id}`"
+          target="_blank"
           class="dialog__title"
         >
           {{ dialogTitle }}
+          <span v-if="props.dialog?.count" style="color: gray">
+            ({{ props.dialog?.count }})
+          </span>
         </NuxtLink>
         <p class="dialog__message text-slate-400">
           {{ props.dialog.last_message.text?.slice(0, 200) }}
         </p>
+      </div>
+
+      <div class="dialog__buttons">
+        <NuxtLink
+          :to="`/dialogs/attachments/${props.dialog.conversation.peer.id}?type=video`"
+        >
+          Видео
+        </NuxtLink>
       </div>
     </div>
   </div>
@@ -40,18 +52,6 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-});
-
-const profileStore = useProfileStore();
-
-const groupImage = computed(() => {
-  const peerId = props.dialog.conversation.peer.id;
-
-  if (profileStore.groups?.[peerId]?.photo_50) {
-    return profileStore.groups?.[peerId].photo_50;
-  }
-
-  return props.dialog.conversation.chat_settings.title[0];
 });
 
 const dialogTitle = computed(() => {

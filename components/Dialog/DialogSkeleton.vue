@@ -19,6 +19,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #202a37;
 
   &__info {
     width: 100%;

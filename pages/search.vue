@@ -17,10 +17,10 @@
         <div v-if="messages.length > 0" class="dialog__list">
           <template v-for="message in messages" :key="message.id">
             <MessageItem
+              class="search__item"
               :message="message"
               :author="profileStore.getProfileById(message.from_id)"
             />
-            <UDivider class="divider" />
           </template>
           <UButton :disabled="isFetching" @click="offset += 100" class="mt-2">
             {{ isFetching ? "Загрузка..." : "Загрузить еще" }}
@@ -29,7 +29,6 @@
         <div v-else-if="isFetching" class="dialog__list">
           <template v-for="_ in 20">
             <DialogSkeleton />
-            <UDivider class="divider" />
           </template>
         </div>
         <template v-else>
@@ -103,10 +102,11 @@ h1 {
     margin-top: 20px;
     margin-bottom: 20px;
   }
-}
 
-.divider {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  &__item {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #202a37;
+  }
 }
 </style>
