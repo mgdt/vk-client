@@ -20,7 +20,6 @@
           :key="dialog.conversation.peer.id"
         >
           <DialogItem
-            @mouseover.once="fetchDialogLength(dialog)"
             class="dialogs__item"
             :dialog="dialog"
             :author="profileStore.getProfileById(dialog.conversation.peer.id)"

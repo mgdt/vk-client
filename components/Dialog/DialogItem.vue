@@ -1,38 +1,47 @@
 <template>
   <div class="dialog__wrapper">
     <div class="dialog">
-      <template v-if="props.dialog.conversation.peer.type === 'chat'">
-        <img
-          v-if="props.dialog.conversation?.chat_settings?.photo?.photo_50"
-          class="dialog__image"
-          :src="props.dialog.conversation?.chat_settings.photo.photo_50"
-          alt=""
-        />
-        <div v-else class="dialog__image">
-          {{ props.dialog.conversation.chat_settings.title[0] }}
+      <div class="dialog__left">
+        <template v-if="props.dialog.conversation.peer.type === 'chat'">
+          <img
+            v-if="props.dialog.conversation?.chat_settings?.photo?.photo_50"
+            class="dialog__image"
+            :src="props.dialog.conversation?.chat_settings.photo.photo_50"
+            alt=""
+          />
+          <div v-else class="dialog__image">
+            {{ props.dialog.conversation.chat_settings.title[0] }}
+          </div>
+        </template>
+
+        <img v-else class="dialog__image" :src="props.author.photo_50" alt="" />
+
+        <div class="dialog__info">
+          <NuxtLink
+            :to="`/dialogs/${props.dialog.conversation.peer.id}`"
+            target="_blank"
+            class="dialog__title"
+          >
+            {{ dialogTitle }}
+            <span v-if="props.dialog?.count" style="color: gray">
+              ({{ props.dialog?.count }})
+            </span>
+          </NuxtLink>
+          <p class="dialog__message text-slate-400">
+            {{ props.dialog.last_message.text?.slice(0, 200) }}
+          </p>
         </div>
-      </template>
-
-      <img v-else class="dialog__image" :src="props.author.photo_50" alt="" />
-
-      <div class="dialog__info">
-        <NuxtLink
-          :to="`/dialogs/${props.dialog.conversation.peer.id}`"
-          target="_blank"
-          class="dialog__title"
-        >
-          {{ dialogTitle }}
-          <span v-if="props.dialog?.count" style="color: gray">
-            ({{ props.dialog?.count }})
-          </span>
-        </NuxtLink>
-        <p class="dialog__message text-slate-400">
-          {{ props.dialog.last_message.text?.slice(0, 200) }}
-        </p>
       </div>
 
-      <div class="dialog__buttons">
+      <div class="dialog__attachments">
         <NuxtLink
+          target="_blank"
+          :to="`/dialogs/attachments/${props.dialog.conversation.peer.id}?type=photo`"
+        >
+          Фото
+        </NuxtLink>
+        <NuxtLink
+          target="_blank"
           :to="`/dialogs/attachments/${props.dialog.conversation.peer.id}?type=video`"
         >
           Видео
@@ -72,7 +81,7 @@ const dialogTitle = computed(() => {
 .dialog {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
 
   &__image {
     width: 50px;
@@ -88,6 +97,17 @@ const dialogTitle = computed(() => {
 
   &__message {
     font-size: 14px;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__attachments {
+    display: flex;
+    gap: 10px;
   }
 }
 </style>

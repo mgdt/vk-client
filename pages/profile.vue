@@ -20,8 +20,6 @@ const { data: profile } = useFetch("/api/profile", {
   lazy: true,
 });
 
-console.log(profile.value);
-
 const toast = useToast();
 
 onMounted(() => {

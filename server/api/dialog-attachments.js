@@ -3,11 +3,11 @@ import { vk } from "../vk";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
-  return await vk(event)("messages.getHistory", {
+  return await vk(event)("messages.getHistoryAttachments", {
     params: {
       offset: body.offset,
       peer_id: body.peerId,
-      attachment_types: body.attachmentTypes,
+      media_type: body.attachmentTypes,
       count: 200,
     },
   });

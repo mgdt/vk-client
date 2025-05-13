@@ -34,6 +34,10 @@ const links = [
     to: "/search",
   },
 ];
+
+useHead({
+  title: "ВК Клиент",
+});
 </script>
 
 <style scoped lang="scss">
